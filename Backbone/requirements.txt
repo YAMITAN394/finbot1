@@ -1,0 +1,12 @@
+fastapi
+uvicorn
+jinja2
+pydantic
+pydantic-settings
+google-cloud-bigquery
+yfinance
+google-cloud-firestore
+google-cloud-aiplatform
+python-dotenv
+google-auth
+google-cloud-storage

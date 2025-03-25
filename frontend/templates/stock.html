@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <title>Stock Price</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Get Live Stock Price</h1>
+        <form id="stockForm" class="mb-4">
+            <div class="input-group">
+                <input type="text" id="symbol" class="form-control" placeholder="Enter stock symbol (e.g., AAPL)" required>
+                <div class="input-group-append">
+                    <button type="submit" class="btn btn-primary">Get Price</button>
+                </div>
+            </div>
+        </form>
+        <div id="result" class="alert alert-info" style="display: none;"></div>
+        <a href="/" class="btn btn-secondary">Back to Home</a>
+    </div>
+    <script src="/static/js/main.js"></script>
+</body>
+</html>
