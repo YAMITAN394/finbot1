@@ -185,17 +185,40 @@
                 return;
             }
             
-            // Simulate account creation (demo purposes)
-            setTimeout(() => {
-                // For demo, let's say the account was created successfully
-                successAlert.style.display = 'block';
-                
-                // Redirect to login page after 2 seconds
-                setTimeout(() => {
-                    window.location.href = '/login.html';
-                }, 2000);
-            }, 1500);
-        });
+           // Send data to Flask backend
+fetch('/signup', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+        full_name: fullName,
+        email: email,
+        password: password
+    })
+})
+.then(response => response.json())
+.then(data => {
+    if (data.status === 'success') {
+        successAlert.style.display = 'block';
+        // Redirect to login after 2s
+        setTimeout(() => {
+            window.location.href = '/login.html';
+        }, 2000);
+    } else {
+        errorAlert.textContent = data.message || "An error occurred during signup.";
+        errorAlert.style.display = 'block';
+        button.disabled = false;
+        button.innerHTML = '<i class="fas fa-user-plus mr-2"></i>Create Account';
+    }
+})
+.catch(error => {
+    console.error('Signup error:', error);
+    errorAlert.textContent = "Something went wrong. Please try again.";
+    errorAlert.style.display = 'block';
+    button.disabled = false;
+    button.innerHTML = '<i class="fas fa-user-plus mr-2"></i>Create Account';
+});
 
         // Password validation visual feedback
         document.getElementById('password').addEventListener('input', function() {
