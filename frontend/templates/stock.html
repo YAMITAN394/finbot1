@@ -3,14 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FINBOT - Live Stock Price</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="/static/css/style.css">
-    <title>Stock Price</title>
+    <style>
+        body {
+            background: linear-gradient(to right, #007bff, #00c6ff);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+        }
+
+        .stock-container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+            max-width: 500px;
+            width: 100%;
+            color: #333;
+        }
+
+        .form-control {
+            border-radius: 0.5rem 0 0 0.5rem;
+        }
+
+        .btn-primary {
+            border-radius: 0 0.5rem 0.5rem 0;
+        }
+
+        .alert {
+            margin-top: 20px;
+        }
+
+        h1 {
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        #result span {
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Get Live Stock Price</h1>
-        <form id="stockForm" class="mb-4">
+    <div class="stock-container">
+        <h1>Live Stock Price</h1>
+        <form id="stockForm">
             <div class="input-group">
                 <input type="text" id="symbol" class="form-control" placeholder="Enter stock symbol (e.g., AAPL)" required>
                 <div class="input-group-append">
@@ -19,8 +61,46 @@
             </div>
         </form>
         <div id="result" class="alert alert-info" style="display: none;"></div>
-        <a href="/" class="btn btn-secondary">Back to Home</a>
+        <a href="/dashboard.html" class="btn btn-link d-block text-center mt-3">← Back to Dashboard</a>
+
     </div>
-    <script src="/static/js/main.js"></script>
+
+    <script>
+        document.getElementById('stockForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const symbol = document.getElementById('symbol').value.trim().toUpperCase();
+            const result = document.getElementById('result');
+            
+            result.style.display = 'none';
+            result.classList.remove('alert-success', 'alert-danger');
+            result.textContent = '';
+
+            if (!symbol) {
+                result.textContent = "Please enter a valid stock symbol.";
+                result.classList.add('alert-danger');
+                result.style.display = 'block';
+                return;
+            }
+
+            fetch(`/get_stock_price?symbol=${symbol}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.price !== undefined) {
+                        result.innerHTML = `Current price of <span>${symbol}</span>: $<span>${data.price}</span>`;
+                        result.classList.add('alert-success');
+                    } else {
+                        result.textContent = data.error || "Failed to fetch stock price.";
+                        result.classList.add('alert-danger');
+                    }
+                    result.style.display = 'block';
+                })
+                .catch(err => {
+                    console.error(err);
+                    result.textContent = "An error occurred while fetching stock data.";
+                    result.classList.add('alert-danger');
+                    result.style.display = 'block';
+                });
+        });
+    </script>
 </body>
 </html>
